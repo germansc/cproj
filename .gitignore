@@ -1,0 +1,38 @@
+# Build System:
+# -------------
+build/**
+
+# Unit-Tests
+# ----------
+tests/report/*
+test/build/*
+
+# Archivos de IDEs - LSPs
+# -----------------------
+.idea
+.ccls-cache
+.vscode
+
+# General C Ignores:
+# ------------------
+# Prerequisites
+*.d
+
+# Object files
+*.o
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+
+# Executables
+*.exe
+*.out
+*.app
+*.elf
