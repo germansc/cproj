@@ -107,6 +107,26 @@ GDB=gdb
 gdb: debug
 	@$(GDB) $(BIN_NAME)
 
+# -- Module Generator Target --
+# Parse additional arguments as parameters instead of additional targets.
+ifeq (module,$(firstword $(MAKECMDGOALS)))
+  # use the rest as arguments for "run"
+  RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  # ...and turn them into do-nothing targets
+  $(eval $(RUN_ARGS):;@:)
+
+  MODULE=$(firstword $(RUN_ARGS))
+  FILENAME=$(shell basename $(MODULE))
+  DIRNAME=$(shell dirname $(MODULE))
+endif
+
+module:
+	@echo "Creating new $(FILENAME) module at: src/$(DIRNAME)"
+	@mkdir -p src/$(DIRNAME)
+	@mkdir -p test/tests/$(DIRNAME)
+	@cp templates/module.c src/$(DIRNAME)/$(FILENAME).c
+	@cp templates/module.h src/$(DIRNAME)/$(FILENAME).h
+	@cp templates/test_module.c test/tests/$(DIRNAME)/test_$(FILENAME).c
 
 # -------------------------------------------------------------- GENERAL RULES
 # Reglas generales para compilacion de objetos.
