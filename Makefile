@@ -2,9 +2,9 @@
 # 2023 - germansc
 #
 
-# INFORMACIÓN DEL PROTECTO #
+# -------------------------------------------------------------- PROJECT SETUP
 PROJECT_NAME = "GENERIC MAKEFILE FOR CROSS AND NON-CROSS COMPILATION"
-COMPANY = "SOFTWARE Division of GSC Industies"
+COMPANY = "SOFTWARE Division of GSC Industries"
 AUTHOR = "Germán Sc"
 YEAR = "2023"
 
@@ -31,7 +31,8 @@ debug: CFLAGS +=-O0 -g3
 SRC_PATH = src
 OBJ_PATH = $(BUILD_PATH)/objects
 
-# Listo todos los archivos fuente del directorio de SRC_PATH y los subdirectorios.
+# Listo todos los archivos fuente del directorio de SRC_PATH y los
+# subdirectorios.
 SRC_LIST = $(shell find $(SRC_PATH) -name '*.$(SRC_EXT)')
 SRC_DIRS = $(shell find $(SRC_PATH) -type d)
 
@@ -48,7 +49,7 @@ INCLUDES = $(SRC_DIRS:%=-I %)
 .PHONY: default_target
 default_target: help
 
-# TARGETS AUXILIARES #
+# ---------------------------------------------------------- AUXILIARY TARGETS
 .PHONY: help
 help:
 	@echo
@@ -77,7 +78,7 @@ clean:
 	@echo ""
 	@$(RM) -r $(BUILD_PATH)
 
-# TARGETS PRINCIPALES #
+# -------------------------------------------------------------- BUILD TARGETS
 .PHONY: all
 all: release
 
@@ -98,7 +99,16 @@ $(BIN_NAME): $(OBJECTS)
 	$(SIZE) $(BIN_NAME)
 	@echo ""
 
-# --------------------------------------------------------------------------- #
+# -------------------------------------------------------- DEVELOPMENT TARGETS
+
+# Debugging tool
+GDB=gdb
+
+gdb: debug
+	@$(GDB) $(BIN_NAME)
+
+
+# -------------------------------------------------------------- GENERAL RULES
 # Reglas generales para compilacion de objetos.
 -include $(DEPENDS)
 
