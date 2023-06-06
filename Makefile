@@ -128,6 +128,13 @@ module:
 	@cp templates/module.h src/$(DIRNAME)/$(FILENAME).h
 	@cp templates/test_module.c test/tests/$(DIRNAME)/test_$(FILENAME).c
 
+
+# --------------------------------------------------------------- TEST TARGETS
+#  The tests targets should redirect to the ceedling tool using the 'test'
+#  directory as root.
+
+# TODO
+
 # -------------------------------------------------------------- GENERAL RULES
 # Reglas generales para compilacion de objetos.
 -include $(DEPENDS)

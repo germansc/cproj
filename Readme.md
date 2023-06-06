@@ -21,7 +21,9 @@ directory structure:
 * **src:** This directory would hold the source code of the project.
 
 * **test:** This directory would hold test files, including unit and functional
-  tests, which can be run to ensure the program is working as intended.
+  tests, which can be run to ensure the program is working as intended. The
+  current version contains a project configuration file based on the ceedling
+  unit-tests suite for embedded C projects.
 
 * **tools:** This directory would hold any build scripts or third-party tools
   used in the project.
