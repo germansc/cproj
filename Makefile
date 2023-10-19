@@ -10,6 +10,7 @@ YEAR = 2023
 
 # TOOLCHAIN  #
 CXX = gcc
+GDB = gdb
 SIZE = size
 
 BUILD_PATH = build
@@ -89,7 +90,7 @@ release: dirs $(BIN_NAME)
 .PHONY: debug
 debug: dirs $(BIN_NAME)
 
-# EJECUTABLE PRINCIPAL #
+# Main Executable
 $(BIN_NAME): $(OBJECTS)
 	@echo ""
 	@echo "Linking: $@"
@@ -100,11 +101,20 @@ $(BIN_NAME): $(OBJECTS)
 	$(SIZE) $(BIN_NAME)
 	@echo ""
 
+
+# -------------------------------------------------------------- GENERAL RULES
+# General Object compilation rules
+-include $(DEPENDS)
+
+$(OBJ_PATH)/%.o: $(SRC_PATH)/%.$(SRC_EXT)
+	@echo ""
+	@echo "Compiling: $< -> $@"
+	$(CXX) $(CFLAGS) $(INCLUDES) -MP -MMD -c $< -o $@
+
 # -------------------------------------------------------- DEVELOPMENT TARGETS
 
-# Debugging tool
-GDB=gdb
 
+# -- Debug the compiled executable --
 gdb: debug
 	@$(GDB) $(BIN_NAME)
 
@@ -149,11 +159,3 @@ module:
 
 # TODO
 
-# -------------------------------------------------------------- GENERAL RULES
-# Reglas generales para compilacion de objetos.
--include $(DEPENDS)
-
-$(OBJ_PATH)/%.o: $(SRC_PATH)/%.$(SRC_EXT)
-	@echo ""
-	@echo "Compiling: $< -> $@"
-	$(CXX) $(CFLAGS) $(INCLUDES) -MP -MMD -c $< -o $@
