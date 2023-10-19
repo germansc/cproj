@@ -11,7 +11,9 @@ test/build/*
 # -----------------------
 .idea
 .ccls-cache
+.cache
 .vscode
+compile_commands.json
 
 # General C Ignores:
 # ------------------
