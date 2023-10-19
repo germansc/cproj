@@ -113,6 +113,9 @@ $(OBJ_PATH)/%.o: $(SRC_PATH)/%.$(SRC_EXT)
 
 # -------------------------------------------------------- DEVELOPMENT TARGETS
 
+# -- Compile and Run the main executable
+run: release
+	@$(BIN_NAME)
 
 # -- Debug the compiled executable --
 gdb: debug
