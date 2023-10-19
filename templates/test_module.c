@@ -1,14 +1,12 @@
 /* ***************************************************************************
- *   Project: C-Proj
- *      file: test_module.c
- *    author: germansc
+ *   Project: PROJECT_TAG
+ *      file: test_FILE_TAG.c
+ *    author: AUTHOR_TAG
  *   version: 1.0
  *
- * Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim
- * labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet.
- * Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum
+ * Tests for the FILE_TAG module of the project.
  *
- * Copyright (c) 2023 germansc. All Rights Reserved.
+ * Copyright (c) 2023 AUTHOR_TAG - All Rights Reserved.
  *
  * ************************************************************************* */
 
@@ -28,7 +26,7 @@
 /* In this place include the header file where the external interface of the
  * module under test is declared. */
 
-// #include "persistence.h"
+#include "DIR_TAG/FILE_TAG.h"
 
 /* ====================================================== [AUXILIAR HEADERS] */
 

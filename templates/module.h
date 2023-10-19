@@ -1,19 +1,19 @@
 /* ***************************************************************************
- *   Project: C-Proj
- *      file: module.h
- *    author: germansc
+ *   Project: PROJECT_TAG
+ *      file: FILE_TAG.h
+ *    author: AUTHOR_TAG
  *   version: 1.0
  *
  * Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim
  * labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet.
  * Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum
  *
- * Copyright (c) 2023 germansc. All Rights Reserved.
+ * Copyright (c) 2023 AUTHOR_TAG - All Rights Reserved.
  *
  * ************************************************************************* */
 
-#ifndef _H_FILENAME
-#define _H_FILENAME
+#ifndef _H_DIR_UPPER_TAG_FILE_UPPER_TAG
+#define _H_DIR_UPPER_TAG_FILE_UPPER_TAG
 
 /* ============================================================== [INCLUDES] */
 
@@ -30,4 +30,4 @@
 
 /* =========================================== [PUBLIC INTERFACE PROTOTYPES] */
 
-#endif // _H_FILENAME
+#endif // _H_DIR_UPPER_TAG_FILE_UPPER_TAG

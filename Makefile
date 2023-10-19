@@ -3,10 +3,10 @@
 #
 
 # -------------------------------------------------------------- PROJECT SETUP
-PROJECT_NAME = "GENERIC MAKEFILE FOR CROSS AND NON-CROSS COMPILATION"
-COMPANY = "SOFTWARE Division of GSC Industries"
-AUTHOR = "Germán Sc"
-YEAR = "2023"
+PROJECT_NAME = GENERIC MAKEFILE FOR CROSS AND NON-CROSS COMPILATION
+COMPANY = SOFTWARE Division of GSC Industries
+AUTHOR = Germán Sc.
+YEAR = 2023
 
 # TOOLCHAIN  #
 CXX = gcc
@@ -30,6 +30,7 @@ debug: CFLAGS +=-O0 -g3
 # PATHS #
 SRC_PATH = src
 OBJ_PATH = $(BUILD_PATH)/objects
+TEST_SRC_PATH = test/tests
 
 # Listo todos los archivos fuente del directorio de SRC_PATH y los
 # subdirectorios.
@@ -56,7 +57,7 @@ help:
 	@echo $(PROJECT_NAME)
 	@echo "----------------------------------------------"
 	@echo "$(COMPANY)"
-	@echo "$(AUTHOR) · $(YEAR)"
+	@echo "$(YEAR) · $(AUTHOR)"
 	@echo ""
 	@echo ""
 	@echo "TARGETS DE COMPILACIÓN:"
@@ -118,16 +119,29 @@ ifeq (module,$(firstword $(MAKECMDGOALS)))
   MODULE=$(firstword $(RUN_ARGS))
   FILENAME=$(shell basename $(MODULE))
   DIRNAME=$(shell dirname $(MODULE))
+  FILENAME_UPPER=$(shell echo $(FILENAME) | tr a-z A-Z)
+  DIRNAME_UPPER=$(shell echo $(DIRNAME) | tr a-z A-Z)
 endif
 
 module:
 	@echo "Creating new $(FILENAME) module at: src/$(DIRNAME)"
-	@mkdir -p src/$(DIRNAME)
-	@mkdir -p test/tests/$(DIRNAME)
-	@cp templates/module.c src/$(DIRNAME)/$(FILENAME).c
-	@cp templates/module.h src/$(DIRNAME)/$(FILENAME).h
-	@cp templates/test_module.c test/tests/$(DIRNAME)/test_$(FILENAME).c
-
+	@mkdir -p $(SRC_PATH)/$(DIRNAME)
+	@mkdir -p $(TEST_SRC_PATH)/$(DIRNAME)
+	@cp templates/module.c $(SRC_PATH)/$(DIRNAME)/$(FILENAME).c
+	@cp templates/module.h $(SRC_PATH)/$(DIRNAME)/$(FILENAME).h
+	@cp templates/test_module.c $(TEST_SRC_PATH)/$(DIRNAME)/test_$(FILENAME).c
+	@sed -i 's/PROJECT_TAG/$(PROJECT_NAME)/g' $(SRC_PATH)/$(DIRNAME)/$(FILENAME).[ch]
+	@sed -i 's/PROJECT_TAG/$(PROJECT_NAME)/g' $(TEST_SRC_PATH)/$(DIRNAME)/test_$(FILENAME).c
+	@sed -i 's/DIR_TAG/$(DIRNAME)/g' $(SRC_PATH)/$(DIRNAME)/$(FILENAME).[ch]
+	@sed -i 's/DIR_TAG/$(DIRNAME)/g' $(TEST_SRC_PATH)/$(DIRNAME)/test_$(FILENAME).c
+	@sed -i 's/FILE_TAG/$(FILENAME)/g' $(SRC_PATH)/$(DIRNAME)/$(FILENAME).[ch]
+	@sed -i 's/FILE_TAG/$(FILENAME)/g' $(TEST_SRC_PATH)/$(DIRNAME)/test_$(FILENAME).c
+	@sed -i 's/DIR_UPPER_TAG/$(DIRNAME_UPPER)/g' $(SRC_PATH)/$(DIRNAME)/$(FILENAME).[ch]
+	@sed -i 's/FILE_UPPER_TAG/$(FILENAME_UPPER)/g' $(SRC_PATH)/$(DIRNAME)/$(FILENAME).[ch]
+	@sed -i 's/AUTHOR_TAG/$(AUTHOR)/g' $(SRC_PATH)/$(DIRNAME)/$(FILENAME).[ch]
+	@sed -i 's/AUTHOR_TAG/$(AUTHOR)/g' $(TEST_SRC_PATH)/$(DIRNAME)/test_$(FILENAME).c
+	@sed -i 's/YEAR_TAG/$(YEAR)/g' $(SRC_PATH)/$(DIRNAME)/$(FILENAME).[ch]
+	@sed -i 's/YEAR_TAG/$(YEAR)/g' $(TEST_SRC_PATH)/$(DIRNAME)/test_$(FILENAME).c
 
 # --------------------------------------------------------------- TEST TARGETS
 #  The tests targets should redirect to the ceedling tool using the 'test'
