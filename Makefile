@@ -1,7 +1,6 @@
 # MAKEFILE GENERICO PARA USOS MULTIPLES
 # 2023 - germansc
 #
-
 # -------------------------------------------------------------- PROJECT SETUP
 PROJECT_NAME = GENERIC MAKEFILE FOR CROSS AND NON-CROSS COMPILATION
 COMPANY = SOFTWARE Division of GSC Industries
