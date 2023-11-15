@@ -4,7 +4,7 @@
 # -------------------------------------------------------------- PROJECT SETUP
 PROJECT_NAME = GENERIC MAKEFILE FOR CROSS AND NON-CROSS COMPILATION
 COMPANY = SOFTWARE Division of GSC Industries
-AUTHOR = Germán Sc.
+AUTHOR = $(USER)
 YEAR = 2023
 
 # TOOLCHAIN  #
