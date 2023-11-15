@@ -10,8 +10,8 @@
  *
  * ************************************************************************* */
 
-#ifndef _H_DIR_UPPER_TAG_FILE_UPPER_TAG
-#define _H_DIR_UPPER_TAG_FILE_UPPER_TAG
+#ifndef _H_DIR_UPPER_TAG_FILE_UPPER_TAG_
+#define _H_DIR_UPPER_TAG_FILE_UPPER_TAG_
 
 /* ============================================================== [INCLUDES] */
 
@@ -28,4 +28,4 @@
 
 /* =========================================== [PUBLIC INTERFACE PROTOTYPES] */
 
-#endif // _H_DIR_UPPER_TAG_FILE_UPPER_TAG
+#endif // _H_DIR_UPPER_TAG_FILE_UPPER_TAG_
