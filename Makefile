@@ -153,7 +153,7 @@ module:
 
 # --------------------------------------------------------------- TEST TARGETS
 #  The tests targets should redirect to the ceedling tool using the 'test'
-#  directory as root.
+#  directory as working dir.
 
 # TODO
 
