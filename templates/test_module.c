@@ -6,7 +6,7 @@
  *
  * Tests for the FILE_TAG module of the project.
  *
- * Copyright (c) 2023 AUTHOR_TAG - All Rights Reserved.
+ * DATE_TAG - AUTHOR_TAG
  *
  * ************************************************************************* */
 

@@ -6,7 +6,7 @@
  *
  * DESCRIPTION_TAG
  *
- * Copyright (c) 2023 AUTHOR_TAG - All Rights Reserved.
+ * DATE_TAG - AUTHOR_TAG
  *
  * ************************************************************************* */
 
