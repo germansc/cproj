@@ -26,7 +26,7 @@
 /* In this place include the header file where the external interface of the
  * module under test is declared. */
 
-#include "DIR_TAG/FILE_TAG.h"
+#include "FILE_TAG.h"
 
 /* ====================================================== [AUXILIAR HEADERS] */
 
