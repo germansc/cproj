@@ -22,6 +22,7 @@ SRC_EXT = c
 
 # OPCIONES Y LIBRERÍAS UTILIZADAS #
 CFLAGS = -Wall -Wextra
+LFLAGS = $(CFLAGS)
 LIBS =
 
 release: CFLAGS +=-O2
@@ -93,7 +94,7 @@ debug: dirs $(BIN_NAME)
 $(BIN_NAME): $(OBJECTS)
 	@echo ""
 	@echo "Linking: $@"
-	$(CXX) $(OBJECTS) $(LIBS) -o $@
+	$(CXX) $(OBJECTS) $(LFLAGS) $(LIBS) -o $@
 	@echo ""
 	@echo "Build complete -> $(BIN_NAME)"
 	@echo "------------------------------------------------"
