@@ -47,6 +47,13 @@ DEPENDS = $(patsubst %.o, %.d, $(OBJECTS))
 # INCLUDES - Agrego todos los subdirectorios de SRC_PATH #
 INCLUDES = $(SRC_DIRS:%=-I %)
 
+# DEFINES - Custom compilation definitions.
+DEFS =
+
+# If required, an external configuration file could be sourced here:
+# include config.mki
+#
+
 # DEFAULT TARGET #
 .PHONY: default_target
 default_target: help
@@ -109,7 +116,7 @@ $(BIN_NAME): $(OBJECTS)
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.$(SRC_EXT)
 	@echo ""
 	@echo "Compiling: $< -> $@"
-	$(CXX) $(CFLAGS) $(INCLUDES) -MP -MMD -c $< -o $@
+	$(CXX) $(CFLAGS) $(DEFS) $(INCLUDES) -MP -MMD -c $< -o $@
 
 # -------------------------------------------------------- DEVELOPMENT TARGETS
 
