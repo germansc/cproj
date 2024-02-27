@@ -50,9 +50,13 @@ INCLUDES = $(SRC_DIRS:%=-I %)
 # DEFINES - Custom compilation definitions.
 DEFS =
 
-# If required, an external configuration file could be sourced here:
-# include config.mki
-#
+# If it exists, an external config.mki file is sourced here. This file can be
+# used to set up some hardware or project specific configuration without
+# polluting the makefile. Makefile syntax is expected as the file is simply
+# sourced.
+ifneq ("$(wildcard config.mki)","")
+	include config.mki
+endif
 
 # DEFAULT TARGET #
 .PHONY: default_target
