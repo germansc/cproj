@@ -1,7 +1,7 @@
 # Generic C Project
 
-This repository is for a generic C project with the following file and
-directory structure:
+This repository is a template for a generic C project with the following file
+and directory structure:
 
 ```
 .
