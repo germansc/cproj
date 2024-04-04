@@ -48,11 +48,13 @@ following commands:
 make all
 ```
 
-This would compile the source code into an executable called `runner`inside a
-`build`directory. To run the application the following command can be used.
+This would compile the source code into an executable named after the name of
+this directory inside a `build`directory. To run the application the
+following command can be used (assuming the root dir of the repo is named
+`cproj`)
 
 ```
-build/runner
+build/cproj
 ```
 
 

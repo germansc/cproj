@@ -15,7 +15,8 @@ SIZE = size
 BUILD_PATH = build
 
 # NOMBRE DEL EJECUTABLE #
-BIN_NAME = $(BUILD_PATH)/runner
+PRJ_DIR = $(shell basename $(CURDIR))
+BIN_NAME = $(BUILD_PATH)/$(PRJ_DIR)
 
 # EXTENSIONES - LENGUAJE #
 SRC_EXT = c
