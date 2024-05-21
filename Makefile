@@ -150,7 +150,8 @@ ifeq (module,$(firstword $(MAKECMDGOALS)))
   # ...and turn them into do-nothing targets
   $(eval $(RUN_ARGS):;@:)
 
-  MODULE=$(firstword $(RUN_ARGS))
+  MODULE_ARG=$(firstword $(RUN_ARGS))
+  MODULE=$(MODULE_ARG:src/%=%)
   FILENAME=$(shell basename $(MODULE))
   DIRNAME=$(shell dirname $(MODULE))
   FILENAME_UPPER=$(shell echo $(FILENAME) | tr a-z A-Z)
