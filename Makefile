@@ -155,7 +155,7 @@ ifeq (module,$(firstword $(MAKECMDGOALS)))
   FILENAME=$(shell basename $(MODULE))
   DIRNAME=$(shell dirname $(MODULE))
   FILENAME_UPPER=$(shell echo $(FILENAME) | tr a-z A-Z)
-  DIRNAME_UPPER=$(shell echo $(DIRNAME) | tr a-z A-Z)
+  DIRNAME_UPPER=$(shell echo $(DIRNAME) | tr a-z A-Z | tr / _)
   DATE_STR=$(shell date '+%B %Y')
 endif
 
