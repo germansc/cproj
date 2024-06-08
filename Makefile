@@ -4,7 +4,7 @@
 # -------------------------------------------------------------- PROJECT SETUP
 PROJECT_NAME = GENERIC C PROJECT FOR CROSS AND NON-CROSS COMPILATION
 COMPANY = SOFTWARE Division of GSC Industries
-AUTHOR = $(USER)
+AUTHOR = GERMANSC
 YEAR = 2023
 
 # TOOLCHAIN  #
@@ -171,7 +171,7 @@ module:
 	@sed -i "s|FILE_TAG|$(FILENAME)|g" $(SRC_PATH)/$(DIRNAME)/$(FILENAME).[ch] $(TEST_SRC_PATH)/$(DIRNAME)/test_$(FILENAME).c
 	@sed -i "s|DIR_UPPER_TAG|$(DIRNAME_UPPER)|g" $(SRC_PATH)/$(DIRNAME)/$(FILENAME).[ch] $(TEST_SRC_PATH)/$(DIRNAME)/test_$(FILENAME).c
 	@sed -i "s|FILE_UPPER_TAG|$(FILENAME_UPPER)|g" $(SRC_PATH)/$(DIRNAME)/$(FILENAME).[ch] $(TEST_SRC_PATH)/$(DIRNAME)/test_$(FILENAME).c
-	@sed -i "s|AUTHOR_TAG|$(AUTHOR)|g" $(SRC_PATH)/$(DIRNAME)/$(FILENAME).[ch] $(TEST_SRC_PATH)/$(DIRNAME)/test_$(FILENAME).c
+	@sed -i "s|AUTHOR_TAG|$(USER)|g" $(SRC_PATH)/$(DIRNAME)/$(FILENAME).[ch] $(TEST_SRC_PATH)/$(DIRNAME)/test_$(FILENAME).c
 	@sed -i "s|DATE_TAG|$(DATE_STR)|g" $(SRC_PATH)/$(DIRNAME)/$(FILENAME).[ch] $(TEST_SRC_PATH)/$(DIRNAME)/test_$(FILENAME).c
 
 # --------------------------------------------------------------- TEST TARGETS
