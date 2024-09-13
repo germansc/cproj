@@ -91,10 +91,6 @@ help:
 	@echo "    help       : Esta ayuda."
 	@echo ""
 
-.PHONY: dirs
-dirs:
-	@mkdir -p $(dir $(OBJECTS))
-
 .PHONY: clean
 clean:
 	@echo "Deleting executables and directories..."
@@ -106,10 +102,10 @@ clean:
 all: release
 
 .PHONY: release
-release: dirs $(BIN_NAME)
+release: $(BIN_NAME)
 
 .PHONY: debug
-debug: dirs $(BIN_NAME)
+debug: $(BIN_NAME)
 
 # Main Executable
 $(BIN_NAME): $(OBJECTS)
@@ -130,6 +126,7 @@ $(BIN_NAME): $(OBJECTS)
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.$(SRC_EXT)
 	@echo ""
 	@echo "Compiling: $< -> $@"
+	@mkdir -p $(dir $@)
 	$(CXX) $(CFLAGS) $(DEFS) $(INCLUDES) -MP -MMD -c $< -o $@
 
 # -------------------------------------------------------- DEVELOPMENT TARGETS
