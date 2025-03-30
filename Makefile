@@ -175,5 +175,22 @@ module:
 #  The tests targets should redirect to the ceedling tool using the 'test'
 #  directory as working dir.
 
-# TODO
+# -- Test Target Redirect --
+ifeq (test,$(firstword $(MAKECMDGOALS)))
+# Parse additional arguments as parameters instead of additional targets.
+  RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  # ...and turn them into do-nothing targets
+  $(eval $(RUN_ARGS):;@:)
+
+  TEST_ARG=$(strip $(firstword $(RUN_ARGS)))
+  ifeq ($(TEST_ARG),)
+	TEST_ARG="runalltests"
+  endif
+
+endif
+
+.PHONY: test
+test: ## Redirige el siguiente target al makefile de `test`.
+	@echo "Testing $(TEST_ARG)"
+	$(MAKE) -C test $(TEST_ARG)
 
