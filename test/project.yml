@@ -1,9 +1,10 @@
 #    Project: C-Proj
 #       file: project.yml
 #     author: germansc
-#    version: 1.0
+#    version: 2.0
 #
 #  Project configuration file for the unit-test framework based on Ceedling.
+#  Updated for Ceedling v1.0.x
 #
 #  Copyright (c) 2023 germansc. All Rights Reserved.
 #
@@ -11,13 +12,10 @@
 
 :project:
   :use_exceptions: FALSE
-  :use_test_preprocessor: TRUE
-  :use_auxiliary_dependencies: TRUE
+  :use_test_preprocessor: :all
   :build_root: build
 #  :release_build: TRUE
   :test_file_prefix: test_
-  :which_ceedling: gem
-  :ceedling_version: 0.31.1
   :default_tasks:
     - test:all
 
@@ -32,6 +30,8 @@
     - -:tests/support
   :source:
     - ../src/**
+  :include:
+    - ../src/**
   :support:
     - tests/support
   :libraries: []
@@ -42,11 +42,9 @@
   #  2) add entries to the :common: section (e.g. :test: has TEST defined)
   :common: &common_defines []
   :test:
-    - *common_defines
-    - TEST
-  :test_preprocess:
-    - *common_defines
-    - TEST
+    :*:
+      - *common_defines
+      - TEST
 
 :cmock:
   :mock_prefix: mock_
@@ -66,6 +64,10 @@
 # You will need to have gcov and gcovr both installed to make it work.
 # For more information on these options, see docs in plugins/gcov
 :gcov:
+  :summaries: TRUE
+  :report_task: TRUE
+  :utilities:
+    - gcovr
   :reports:
     - HtmlDetailed
   :gcovr:
@@ -90,9 +92,7 @@
   :release: []
 
 :plugins:
-  :load_paths:
-    - "#{Ceedling.load_path}"
   :enabled:
-    - stdout_pretty_tests_report
+    - report_tests_pretty_stdout
     - module_generator
 ...

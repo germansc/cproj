@@ -32,10 +32,9 @@ help:
 	@echo "UNIT-TEST MAKEFILE:"
 	@echo "----------------------------------------------"
 	@echo
-	@echo TARGETS DE TESTING:
+	@echo TESTING TARGETS:
 	@echo "clean         : Cleanup the test build directories"
 	@echo "all           : Run the whole test suite"
-	@echo "delta         : Only run the tests of modified source files"
 	@echo "report        : Generate a coverage report"
 	@echo "summary       : Print coverage summary"
 	@echo "<source-file> : Run the tests asosciated with the given source file"
@@ -64,20 +63,11 @@ all:
 	@echo "Done testing for target $(TARGET)."
 	@echo
 
-delta:
-	@echo
-	@echo "Calling CEEDLING (delta test)"
-	@echo
-	$(TOOL) $(TOOLFLAGS) $(TEST_TARGET_OPTS) test:delta
-	@echo
-	@echo "Done testing for target $(TARGET)."
-	@echo
-
 coverage:
 	@echo
 	@echo "Calling CEEDLING to generate coverage information..."
 	@echo
-	$(TOOL) $(TOOLFLAGS) $(TEST_TARGET_OPTS) gcov:all utils:gcov
+	$(TOOL) $(TOOLFLAGS) $(TEST_TARGET_OPTS) gcov:all report:gcov
 	@echo
 	@echo "Done testing for target $(TARGET)."
 	@echo
@@ -94,13 +84,13 @@ test_%.c %.c %::build-info
 # General coverage generation rule for individual files
 #
 cov_%.c cov_%::build-info
-	$(TOOL) $(TOOLFLAGS) $(TEST_TARGET_OPTS) gcov:$(@:cov_%=%) utils:gcov | grep -v "Could not find"
+	$(TOOL) $(TOOLFLAGS) $(TEST_TARGET_OPTS) gcov:$(@:cov_%=%) report:gcov | grep -v "Could not find"
 
 #
 # Print the actual coverage report
 #
 summary:
-	gcovr --root ../src --exclude ".*/test_.*" build/gcov/out --print-summary
+	gcovr --root ../src --exclude ".*/test_.*" build/artifacts/gcov/gcovr --print-summary
 
 #
 # Empty rule to avoid running test_% on the actual Makefile
