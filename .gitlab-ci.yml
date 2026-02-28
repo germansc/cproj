@@ -1,0 +1,62 @@
+stages:
+  - build
+  - check
+  - test
+
+default:
+  image: nixos/nix
+  before_script:
+    # Enable flakes and nix-command in the container
+    - echo "experimental-features = nix-command flakes" >> /etc/nix/nix.conf
+
+# ---------------------------------------------------------------------------
+# Build Stage
+# ---------------------------------------------------------------------------
+build:
+  stage: build
+  script:
+    - nix develop -c make release
+    - nix develop -c make clean && nix develop -c make debug
+    - nix develop -c make clean && nix develop -c compiledb make release
+  artifacts:
+    paths:
+      - compile_commands.json
+    expire_in: 1 hour
+
+# ---------------------------------------------------------------------------
+# Check Stage
+# ---------------------------------------------------------------------------
+clang-format:
+  stage: check
+  needs:
+    - job: build
+      artifacts: false
+  script:
+    - nix develop -c bash -c 'find src -name "*.c" -o -name "*.h" | xargs clang-format --dry-run --Werror -style=file'
+
+cppcheck:
+  stage: check
+  needs:
+    - job: build
+      artifacts: false
+  script:
+    - nix develop -c bash -c 'cppcheck --enable=warning,style,performance,portability --suppress=missingIncludeSystem --error-exitcode=1 src/'
+
+clang-tidy:
+  stage: check
+  needs:
+    - job: build
+      artifacts: true
+  script:
+    - nix develop -c bash -c 'find src -name "*.c" | xargs clang-tidy -p .'
+
+# ---------------------------------------------------------------------------
+# Test Stage
+# ---------------------------------------------------------------------------
+unit-tests:
+  stage: test
+  needs:
+    - job: build
+      artifacts: false
+  script:
+    - nix develop -c make test

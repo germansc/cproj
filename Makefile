@@ -184,7 +184,7 @@ ifeq (test,$(firstword $(MAKECMDGOALS)))
 
   TEST_ARG=$(strip $(firstword $(RUN_ARGS)))
   ifeq ($(TEST_ARG),)
-	TEST_ARG="runalltests"
+	TEST_ARG="all"
   endif
 
 endif
