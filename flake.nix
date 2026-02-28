@@ -37,7 +37,7 @@
             echo "=================================="
             echo "Toolchain: GCC $(gcc --version | head -n1 | awk '{print $NF}')"
             echo "Make:      $(make --version | head -n1)"
-            echo "Ceedling:  $(ceedling version 2>/dev/null || echo 'available')"
+            echo "Ceedling:  $(ceedling version 2>/dev/null | grep 'Ceedling =>' | awk '{print $NF}' || echo 'available')"
             echo ""
             echo "Run 'make help' for available targets"
           '';

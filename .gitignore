@@ -12,6 +12,7 @@ test/build/*
 
 # Archivos de IDEs - LSPs
 # -----------------------
+.direnv
 .idea
 .ccls-cache
 .cache
