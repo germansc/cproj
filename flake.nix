@@ -19,6 +19,7 @@
             pkgs.gnumake
             pkgs.gdb
             pkgs.binutils
+            pkgs.compiledb
 
             # Static Analysis & Formatting
             pkgs.clang-tools
