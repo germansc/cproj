@@ -19,6 +19,17 @@ TOOL = ceedling
 RM = rm -rf
 
 TOOLFLAGS ?=
+BUILD_PATH = build
+
+# Ceedling copies vendors Unity/CMock sources into the build directory. When
+# running from a Nix environment, the copied files inherit the read-only
+# permissions from the Nix store, causing permission errors on subsequent runs.
+# This macro wraps ceedling calls to fix vendor permissions after execution.
+define run-ceedling
+	$(TOOL) $(TOOLFLAGS) $(1); _rc=$$?; \
+	if [ -d $(BUILD_PATH)/vendor ]; then chmod -R u+w $(BUILD_PATH)/vendor; fi; \
+	exit $$_rc
+endef
 
 # ***************************************
 #
@@ -46,9 +57,9 @@ help:
 #
 clean:
 	@echo
-	@echo "Calling CEEDLING for cleanup"
+	@echo "Cleaning test build directories..."
 	@echo
-	$(TOOL) $(TOOLFLAGS) clobber
+	@if [ -d $(BUILD_PATH) ]; then chmod -R u+w $(BUILD_PATH) && $(RM) $(BUILD_PATH); fi
 	@echo
 	@echo "Done."
 	@echo
@@ -58,7 +69,7 @@ all:
 	@echo
 	@echo "Calling CEEDLING (all tests)"
 	@echo
-	$(TOOL) $(TOOLFLAGS) $(TEST_TARGET_OPTS) test:all
+	@$(call run-ceedling,$(TEST_TARGET_OPTS) test:all)
 	@echo
 	@echo "Done testing for target $(TARGET)."
 	@echo
@@ -67,7 +78,7 @@ coverage:
 	@echo
 	@echo "Calling CEEDLING to generate coverage information..."
 	@echo
-	$(TOOL) $(TOOLFLAGS) $(TEST_TARGET_OPTS) gcov:all report:gcov
+	@$(call run-ceedling,$(TEST_TARGET_OPTS) gcov:all report:gcov)
 	@echo
 	@echo "Done testing for target $(TARGET)."
 	@echo
@@ -78,13 +89,13 @@ report: coverage
 # General test running rule for individual files
 #
 test_%.c %.c %::build-info
-	$(TOOL) $(TOOLFLAGS) $(TEST_TARGET_OPTS) test:$(@:test_%=%)
+	@$(call run-ceedling,$(TEST_TARGET_OPTS) test:$(@:test_%=%))
 
 #
 # General coverage generation rule for individual files
 #
 cov_%.c cov_%::build-info
-	$(TOOL) $(TOOLFLAGS) $(TEST_TARGET_OPTS) gcov:$(@:cov_%=%) report:gcov | grep -v "Could not find"
+	@$(call run-ceedling,$(TEST_TARGET_OPTS) gcov:$(@:cov_%=%) report:gcov) | grep -v "Could not find"
 
 #
 # Print the actual coverage report
@@ -97,4 +108,4 @@ summary:
 #
 Makefile: ;
 
-.PHONY: clean all delta report coverage summary help
+.PHONY: clean all report coverage summary help
