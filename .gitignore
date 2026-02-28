@@ -7,6 +7,9 @@ build/**
 tests/report/*
 test/build/*
 
+# Log Files
+*.log
+
 # Archivos de IDEs - LSPs
 # -----------------------
 .idea
