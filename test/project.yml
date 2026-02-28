@@ -95,4 +95,5 @@
   :enabled:
     - report_tests_pretty_stdout
     - module_generator
+    - gcov
 ...
