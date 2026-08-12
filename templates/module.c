@@ -2,9 +2,7 @@
  *   Project: PROJECT_TAG
  *      file: FILE_TAG.c
  *    author: AUTHOR_TAG
- *   version: 1.0
- *
- * DESCRIPTION_TAG
+ *   version: 0.1.0
  *
  * DATE_TAG - AUTHOR_TAG
  *
