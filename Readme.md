@@ -1,7 +1,8 @@
 # Generic C Project
 
-This repository is a template for a generic C project with the following file
-and directory structure:
+A flake template for a generic C project that can target native applications or
+be cross-compiled for embedded targets by configuring the toolchain. It is built
+around Nix for a reproducible environment and Ceedling for unit testing.
 
 ```
 .
@@ -17,7 +18,7 @@ and directory structure:
 │   ├── project.yml
 │   └── tests/
 ├── tools/
-├── .github/
+├── .github/workflows/ci.yml
 ├── .gitlab-ci.yml
 ├── .clang-format
 ├── flake.nix
@@ -25,70 +26,85 @@ and directory structure:
 └── Readme.md
 ```
 
-* **docs:** This directory would contain any documentation related to the
-  project such as user manuals, technical specifications, and API
-  documentation.
+* **docs:** Project documentation such as datasheets, manuals and technical
+  specifications, or design documentation.
 
-* **src:** This directory would hold the source code of the project.
+* **src:** The source code of the project.
 
-* **templates:** This directory holds the template files used by the module
-  generator to create new source, header, and test file stubs.
+* **templates:** File stubs used by the module generator to scaffold new source,
+  header, and test files.
 
-* **test:** This directory would hold test files, including unit and functional
-  tests, which can be run to ensure the program is working as intended. The
-  current version contains a project configuration file based on the Ceedling
-  v1.0.x unit-test framework for C projects.
+* **test:** Unit and functional tests, run through the Ceedling v1.0.x
+  framework.
 
-* **tools:** This directory would hold any build scripts or third-party tools
-  used in the project.
+* **tools:** for scripts and third-party tools used by the project.
 
-* **Makefile:** This file is used to automate the build process of the project.
-  It contains instructions to compile and link the source code, run tests, and
-  generate executable files.
-
-By modifying the Makefile configuration, this repository can now be utilized in
-both cross-compilation projects and native applications with ease.
+* **Makefile:** Automates building, linking, running, and testing. The
+  toolchain is configured through the `CXX`, `GDB`, and `SIZE` variables, so
+  switching between native and cross-compilation is just a matter of changing
+  them (see *Cross-Compilation*).
 
 
 ## Development Environment
 
 This project uses [Nix](https://nixos.org/) to provide a reproducible
-development environment. The `flake.nix` file declares all required
-dependencies, so all developers and CI pipelines use the exact same toolchain.
+development environment. The `flake.nix` declares all required dependencies, so
+all developers and CI pipelines use the exact same toolchain. This repository
+can also be used as a template (`nix flake init -t github:germansc/cproj`) to
+initialize new projects. Adjust the packages in `flake.nix` (and the tool
+definitions in the `Makefile`) to match each project's toolchain.
 
-To enter the development shell:
+To enter the development shell (or simply `direnv allow` if you have
+[direnv](https://direnv.net/) installed):
 
 ```
 nix develop
 ```
 
-This repository can also be used as a Nix flake template to initialize new
-projects. The packages in `flake.nix` should be adjusted to match the
-toolchain required for each specific project, along with the tool definitions
-(`CXX`, `GDB`, etc.) in the `Makefile`.
-
-The following tools are provided by default:
+Tools provided by default:
 
 * **C Toolchain:** gcc, make, gdb, binutils
-* **Static Analysis:** clang-format, clang-tidy, cppcheck
+* **Static Analysis & Debugging:** clang-format, clang-tidy, cppcheck, valgrind
 * **Unit Testing:** Ceedling v1.0.x (with CMock and Unity)
 * **Code Coverage:** gcovr
 * **Build Utilities:** compiledb
 
 
+## Cross-Compilation
+
+The Makefile builds however you configure the toolchain. For native builds the
+defaults (`gcc`, `gdb`) are used as-is.
+
+To target another platform, you can either override the variables inline:
+
+```
+make CXX=arm-none-eabi-gcc GDB=arm-none-eabi-gdb SIZE=arm-none-eabi-size LIBS="-mcpu=cortex-m4"
+```
+
+or, more conveniently, create a `config.mki` file at the repo root with your
+toolchain and flags. This file is sourced automatically when present, keeping
+project-specific (or hardware-specific) configuration out of the Makefile:
+
+```
+CXX = arm-none-eabi-gcc
+GDB = arm-none-eabi-gdb
+SIZE = arm-none-eabi-size
+CFLAGS += -mcpu=cortex-m4 -mthumb
+```
+
+Any custom defines, library paths, or linker options also go here.
+
+
 ## Building and Running the Project
 
-From inside the development shell (`nix develop`), you can build and run the
-project with the following commands:
+From inside the development shell (`nix develop`), build and run:
 
 ```
 make run
 ```
 
-This would compile the source code into an executable named after the name of
-this directory inside a `build`directory. To run the application the
-following command can be used (assuming the root dir of the repo is named
-`cproj`)
+This compiles the source into an executable named after the repo directory,
+placed inside `build/`. To run a previously built binary directly:
 
 ```
 build/cproj
@@ -100,11 +116,26 @@ For a debug build with symbols and no optimizations:
 make debug
 ```
 
+For an optimized release build:
+
+```
+make release
+```
+
 For more info on the available `Make` targets:
 
 ```
 make help
 ```
+
+
+## Continuous Integration
+
+The repository ships ready-to-use pipelines for both GitHub Actions
+(`.github/workflows/ci.yml`) and GitLab (`gitlab-ci`). Both build in debug and
+release, generate a `compile_commands.json`, run static analysis
+(clang-format, cppcheck, clang-tidy), and execute the unit tests, all inside the
+Nix shell so CI matches the local toolchain.
 
 
 ## Module Generator
@@ -127,26 +158,23 @@ directory.
 
 ## Testing
 
-Unit tests are managed using Ceedling v1.0.x. To run the full test suite:
+Unit tests are managed using Ceedling v1.0.x. Run the full test suite:
 
 ```
 make test
 ```
 
-To run tests for a specific source file:
+Run the tests for a specific source file:
 
 ```
 make test modulename
 ```
 
-To generate a coverage report:
+Generate a coverage report:
 
 ```
 make test coverage
 ```
-
-This would compile the test files and run them. Any output would be printed to
-the console.
 
 
 ## Contributing
