@@ -1,0 +1,15 @@
+Checks: >
+  clang-analyzer-*,
+  clang-diagnostic-*,
+  bugprone-*,
+  performance-*,
+  portability-*,
+  readability-*,
+  -bugprone-easily-swappable-parameters,
+  -bugprone-reserved-identifier,
+  -readability-magic-numbers,
+  -readability-else-after-return,
+  -readability-braces-around-statements
+WarningsAsErrors: ''
+HeaderFilterRegex: '.*'
+FormatStyle: file
