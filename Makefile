@@ -150,11 +150,12 @@ ifeq (module,$(firstword $(MAKECMDGOALS)))
   $(eval $(RUN_ARGS):;@:)
 
   MODULE_ARG=$(firstword $(RUN_ARGS))
-  MODULE=$(MODULE_ARG:src/%=%)
+  MODULE := $(MODULE_ARG:./%=%)
+  MODULE := $(MODULE:src/%=%)
   FILENAME=$(shell basename $(MODULE))
   DIRNAME=$(shell dirname $(MODULE))
-  FILENAME_UPPER=$(shell echo $(FILENAME) | tr a-z A-Z)
-  DIRNAME_UPPER=$(shell echo $(DIRNAME) | tr a-z A-Z | tr / _)
+  FILENAME_UPPER=$(shell echo $(FILENAME) | tr a-z A-Z | tr -d .)
+  DIRNAME_UPPER=$(shell echo $(DIRNAME) | tr a-z A-Z | tr / _ | tr -d .)
   DATE_STR=$(shell date '+%B %Y')
 endif
 
