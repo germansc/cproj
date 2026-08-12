@@ -9,12 +9,6 @@ default : help
 #
 # ***********************************
 
-# Override exported flags to ensure the used tools.
-CC = gcc
-CFLAGS =
-export CC
-export CFLAGS
-
 TOOL = ceedling
 RM = rm -rf
 
@@ -88,20 +82,20 @@ report: coverage
 #
 # General test running rule for individual files
 #
-test_%.c %.c %::build-info
+test_%.c %.c %:
 	@$(call run-ceedling,$(TEST_TARGET_OPTS) test:$(@:test_%=%))
 
 #
 # General coverage generation rule for individual files
 #
-cov_%.c cov_%::build-info
-	@$(call run-ceedling,$(TEST_TARGET_OPTS) gcov:$(@:cov_%=%) report:gcov) | grep -v "Could not find"
+cov_%.c cov_%:
+	@$(call run-ceedling,$(TEST_TARGET_OPTS) gcov:$(@:cov_%=%) report:gcov)
 
 #
 # Print the actual coverage report
 #
 summary:
-	gcovr --root ../src --exclude ".*/test_.*" build/artifacts/gcov/gcovr --print-summary
+	gcovr --root ../src --exclude ".*/test_.*" build/gcov/out --print-summary
 
 #
 # Empty rule to avoid running test_% on the actual Makefile
