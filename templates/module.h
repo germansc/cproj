@@ -2,16 +2,14 @@
  *   Project: PROJECT_TAG
  *      file: FILE_TAG.h
  *    author: AUTHOR_TAG
- *   version: 1.0
- *
- * DESCRIPTION_TAG
+ *   version: 0.1.0
  *
  * DATE_TAG - AUTHOR_TAG
  *
  * ************************************************************************* */
 
-#ifndef _H_DIR_UPPER_TAG_FILE_UPPER_TAG_
-#define _H_DIR_UPPER_TAG_FILE_UPPER_TAG_
+#ifndef _H_GUARD_TAG_
+#define _H_GUARD_TAG_
 
 /* ============================================================== [INCLUDES] */
 
@@ -25,4 +23,4 @@
 
 /* =========================================== [PUBLIC INTERFACE PROTOTYPES] */
 
-#endif // _H_DIR_UPPER_TAG_FILE_UPPER_TAG_
+#endif // _H_GUARD_TAG_

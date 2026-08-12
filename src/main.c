@@ -4,8 +4,6 @@
  *    author: germansc
  *   version: 1.0
  *
- * Copyright (c) 2023 AUTHOR_TAG - All Rights Reserved.
- *
  * ************************************************************************* */
 
 #include <stdio.h>
@@ -15,6 +13,7 @@
  *
  * @param argc Number of arguments given to the command on execution.
  * @param argv List of arguments given to the command.
+ *
  * @return always 0.
  */
 int main(int argc __attribute__((unused)), const char *argv[] __attribute__((unused))) {

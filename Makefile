@@ -16,7 +16,6 @@ BUILD_PATH = build
 
 # NOMBRE DEL EJECUTABLE #
 PRJ_DIR = $(shell basename $(CURDIR))
-BIN_NAME = $(BUILD_PATH)/$(PRJ_DIR)
 
 # EXTENSIONES - LENGUAJE #
 SRC_EXT = c
@@ -26,24 +25,18 @@ CFLAGS = -Wall -Wextra
 LFLAGS = $(CFLAGS)
 LIBS =
 
-release: CFLAGS +=-O2
-debug: CFLAGS +=-O0 -g3
+# OPCIONES POR CONFIGURACIÓN #
+CFLAGS_EXTRA_debug   = -O0 -g3
+CFLAGS_EXTRA_release = -O2
 
 # PATHS #
 SRC_PATH = src
-OBJ_PATH = $(BUILD_PATH)/objects
 TEST_SRC_PATH = test/tests
 
 # Listo todos los archivos fuente del directorio de SRC_PATH y los
 # subdirectorios.
 SRC_LIST = $(shell find $(SRC_PATH) -name '*.$(SRC_EXT)')
 SRC_DIRS = $(shell find $(SRC_PATH) -type d)
-
-# Genero el nombre de los archivos objeto a generar a partir de los sources.
-OBJECTS = $(SRC_LIST:$(SRC_PATH)/%.$(SRC_EXT)=$(OBJ_PATH)/%.o)
-
-# Genero dependencias para recompilar en modificaciones de headers.
-DEPENDS = $(patsubst %.o, %.d, $(OBJECTS))
 
 # INCLUDES - Agrego todos los subdirectorios de SRC_PATH #
 INCLUDES = $(SRC_DIRS:%=-I %)
@@ -98,46 +91,57 @@ clean:
 	@$(RM) -r $(BUILD_PATH)
 
 # -------------------------------------------------------------- BUILD TARGETS
-.PHONY: all
-all: release
 
-.PHONY: release
-release: $(BIN_NAME)
+# Build products and rules for each configuration (debug/release). Each
+# configuration keeps its own object tree and binary under build/<config>/, so
+# switching configurations never reuses stale objects built for the other one.
+# $(1) is the configuration name.
+define CONFIG_TARGETS
 
-.PHONY: debug
-debug: $(BIN_NAME)
+$(1): $(BUILD_PATH)/$(1)/$(PRJ_DIR)
 
-# Main Executable
-$(BIN_NAME): $(OBJECTS)
+$(BUILD_PATH)/$(1)/objects/%.o: $(SRC_PATH)/%.$(SRC_EXT)
 	@echo ""
-	@echo "Linking: $@"
-	$(CXX) $(OBJECTS) $(LFLAGS) $(LIBS) -o $@
+	@echo "Compiling: $$< -> $$@"
+	@mkdir -p $$(dir $$@)
+	$(CXX) $(CFLAGS) $(CFLAGS_EXTRA_$(1)) $(DEFS) $(INCLUDES) -MP -MMD -c $$< -o $$@
+
+$(BUILD_PATH)/$(1)/$(PRJ_DIR): $(SRC_LIST:$(SRC_PATH)/%.$(SRC_EXT)=$(BUILD_PATH)/$(1)/objects/%.o)
 	@echo ""
-	@echo "Build complete -> $(BIN_NAME)"
+	@echo "Linking: $$@"
+	$(CXX) $$^ $(LFLAGS) $(LIBS) -o $$@
+	@echo ""
+	@echo "Build complete -> $$@"
 	@echo "------------------------------------------------"
-	$(SIZE) $(BIN_NAME)
+	$(SIZE) $$@
 	@echo ""
+endef
 
+# Generate debug target and rules
+$(eval $(call CONFIG_TARGETS,debug))
+
+# Generate release target and rules
+$(eval $(call CONFIG_TARGETS,release))
+
+.PHONY: all release debug
+all: debug release
 
 # -------------------------------------------------------------- GENERAL RULES
-# General Object compilation rules
--include $(DEPENDS)
-
-$(OBJ_PATH)/%.o: $(SRC_PATH)/%.$(SRC_EXT)
-	@echo ""
-	@echo "Compiling: $< -> $@"
-	@mkdir -p $(dir $@)
-	$(CXX) $(CFLAGS) $(DEFS) $(INCLUDES) -MP -MMD -c $< -o $@
+# Header dependency files for both configurations.
+-include $(SRC_LIST:$(SRC_PATH)/%.$(SRC_EXT)=$(BUILD_PATH)/debug/objects/%.d)
+-include $(SRC_LIST:$(SRC_PATH)/%.$(SRC_EXT)=$(BUILD_PATH)/release/objects/%.d)
 
 # -------------------------------------------------------- DEVELOPMENT TARGETS
 
 # -- Compile and Run the main executable
+.PHONY: run
 run: release
-	@$(BIN_NAME)
+	@$(BUILD_PATH)/release/$(PRJ_DIR)
 
 # -- Debug the compiled executable --
+.PHONY: gdb
 gdb: debug
-	@$(GDB) $(BIN_NAME)
+	@$(GDB) $(BUILD_PATH)/debug/$(PRJ_DIR)
 
 # -- Module Generator Target --
 # Parse additional arguments as parameters instead of additional targets.
@@ -148,11 +152,13 @@ ifeq (module,$(firstword $(MAKECMDGOALS)))
   $(eval $(RUN_ARGS):;@:)
 
   MODULE_ARG=$(firstword $(RUN_ARGS))
-  MODULE=$(MODULE_ARG:src/%=%)
+  MODULE := $(MODULE_ARG:./%=%)
+  MODULE := $(MODULE:src/%=%)
   FILENAME=$(shell basename $(MODULE))
   DIRNAME=$(shell dirname $(MODULE))
-  FILENAME_UPPER=$(shell echo $(FILENAME) | tr a-z A-Z)
-  DIRNAME_UPPER=$(shell echo $(DIRNAME) | tr a-z A-Z | tr / _)
+  FILENAME_UPPER=$(shell echo $(FILENAME) | tr a-z A-Z | tr -d .)
+  DIRNAME_UPPER=$(shell echo $(DIRNAME) | tr a-z A-Z | tr / _ | tr -d .)
+  GUARD = $(if $(DIRNAME_UPPER),$(DIRNAME_UPPER)_,)$(FILENAME_UPPER)
   DATE_STR=$(shell date '+%B %Y')
 endif
 
@@ -166,8 +172,7 @@ module:
 	@sed -i "s|PROJECT_TAG|$(PROJECT_NAME)|g" $(SRC_PATH)/$(DIRNAME)/$(FILENAME).[ch] $(TEST_SRC_PATH)/$(DIRNAME)/test_$(FILENAME).c
 	@sed -i "s|DIR_TAG|$(DIRNAME)|g" $(SRC_PATH)/$(DIRNAME)/$(FILENAME).[ch] $(TEST_SRC_PATH)/$(DIRNAME)/test_$(FILENAME).c
 	@sed -i "s|FILE_TAG|$(FILENAME)|g" $(SRC_PATH)/$(DIRNAME)/$(FILENAME).[ch] $(TEST_SRC_PATH)/$(DIRNAME)/test_$(FILENAME).c
-	@sed -i "s|DIR_UPPER_TAG|$(DIRNAME_UPPER)|g" $(SRC_PATH)/$(DIRNAME)/$(FILENAME).[ch] $(TEST_SRC_PATH)/$(DIRNAME)/test_$(FILENAME).c
-	@sed -i "s|FILE_UPPER_TAG|$(FILENAME_UPPER)|g" $(SRC_PATH)/$(DIRNAME)/$(FILENAME).[ch] $(TEST_SRC_PATH)/$(DIRNAME)/test_$(FILENAME).c
+	@sed -i "s|GUARD_TAG|$(GUARD)|g" $(SRC_PATH)/$(DIRNAME)/$(FILENAME).[ch] $(TEST_SRC_PATH)/$(DIRNAME)/test_$(FILENAME).c
 	@sed -i "s|AUTHOR_TAG|$(USER)|g" $(SRC_PATH)/$(DIRNAME)/$(FILENAME).[ch] $(TEST_SRC_PATH)/$(DIRNAME)/test_$(FILENAME).c
 	@sed -i "s|DATE_TAG|$(DATE_STR)|g" $(SRC_PATH)/$(DIRNAME)/$(FILENAME).[ch] $(TEST_SRC_PATH)/$(DIRNAME)/test_$(FILENAME).c
 
