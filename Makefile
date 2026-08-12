@@ -132,10 +132,12 @@ $(OBJ_PATH)/%.o: $(SRC_PATH)/%.$(SRC_EXT)
 # -------------------------------------------------------- DEVELOPMENT TARGETS
 
 # -- Compile and Run the main executable
+.PHONY: run
 run: release
 	@$(BIN_NAME)
 
 # -- Debug the compiled executable --
+.PHONY: gdb
 gdb: debug
 	@$(GDB) $(BIN_NAME)
 
