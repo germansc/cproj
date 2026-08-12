@@ -5,6 +5,9 @@ stages:
 
 default:
   image: nixos/nix
+  rules:
+    - if: '$CI_COMMIT_BRANCH =~ /^(master|main)$/'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
   before_script:
     # Enable flakes and nix-command in the container and set a fixed locale.
     - echo "experimental-features = nix-command flakes" >> /etc/nix/nix.conf
