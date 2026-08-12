@@ -6,8 +6,9 @@ stages:
 default:
   image: nixos/nix
   before_script:
-    # Enable flakes and nix-command in the container
+    # Enable flakes and nix-command in the container and set a fixed locale.
     - echo "experimental-features = nix-command flakes" >> /etc/nix/nix.conf
+    - export LC_ALL=C.UTF-8
 
 # ---------------------------------------------------------------------------
 # Build Stage
