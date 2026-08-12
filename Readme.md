@@ -113,7 +113,7 @@ New source modules can be scaffolded using the module generator. Running the
 following command:
 
 ```
-make module src/path/modulename
+make module path/modulename
 ```
 
 Will create:
@@ -136,7 +136,7 @@ make test
 To run tests for a specific source file:
 
 ```
-make test src/path/modulename
+make test modulename
 ```
 
 To generate a coverage report:
