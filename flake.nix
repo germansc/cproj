@@ -10,27 +10,28 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; };
+
+        dev-pkgs = with pkgs; [
+            # C Toolchain
+            gcc
+            binutils
+            gnumake
+            gdb
+            compiledb
+
+            # Static Analysis & Formatting
+            llvmPackages_22.clang-tools
+            cppcheck
+            valgrind
+
+            # Unit Testing (Ceedling + dependencies)
+            ceedling
+            gcovr
+        ];
       in
       {
         devShells.default = pkgs.mkShell {
-          buildInputs = [
-            # C Toolchain
-            pkgs.gcc
-            pkgs.gnumake
-            pkgs.gdb
-            pkgs.binutils
-            pkgs.compiledb
-
-            # Static Analysis & Formatting
-            pkgs.clang-tools
-            pkgs.cppcheck
-
-            # Unit Testing (Ceedling + dependencies)
-            pkgs.ceedling
-
-            # Code Coverage
-            pkgs.gcovr
-          ];
+          buildInputs = dev-pkgs;
 
           shellHook = ''
             echo "C Project Development Environment"

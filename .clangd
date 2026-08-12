@@ -1,0 +1,17 @@
+Documentation:
+  CommentFormat: Doxygen
+Diagnostics:
+  ClangTidy:
+    Remove:
+      - cppcoreguidelines-avoid-non-const-global-variables
+      - readability-else-after-return
+---
+If:
+  PathMatch: .*test_.*.c
+CompileFlags:
+  CompilationDatabase: test/build/artifacts
+  Add:
+    - -isystem/usr/local/include # Para fff.h
+Diagnostics:
+  Suppress:
+    - incompatible-function-pointer-types

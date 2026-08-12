@@ -1,11 +1,11 @@
 # Build System:
 # -------------
-build/**
+build
 
 # Unit-Tests
 # ----------
-tests/report/*
-test/build/*
+tests/report
+test/build
 
 # Log Files
 *.log
