@@ -103,23 +103,25 @@ From inside the development shell (`nix develop`), build and run:
 make run
 ```
 
-This compiles the source into an executable named after the repo directory,
-placed inside `build/`. To run a previously built binary directly:
+This compiles the source and runs the release binary. Each configuration
+builds into its own directory, so the two never mix stale objects:
 
 ```
-build/cproj
+build/release/<name>   # release: -O2, no debug info
+build/debug/<name>     # debug: -O0 -g3, with symbols
 ```
 
-For a debug build with symbols and no optimizations:
-
-```
-make debug
-```
-
-For an optimized release build:
+Build a single configuration with
 
 ```
 make release
+make debug
+```
+
+or both at once with `make all`. To run a previously built binary directly:
+
+```
+build/release/cproj
 ```
 
 For more info on the available `Make` targets:
