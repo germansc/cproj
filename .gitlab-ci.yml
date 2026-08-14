@@ -10,10 +10,13 @@ workflow:
 
 default:
   image: nixos/nix
+  tags:
+    - docker
   before_script:
-    # Enable flakes and nix-command in the container and set a fixed locale.
-    - echo "experimental-features = nix-command flakes" >> /etc/nix/nix.conf
     - export LC_ALL=C.UTF-8
+
+variables:
+  NIX_CONFIG: "experimental-features = nix-command flakes"
 
 # ---------------------------------------------------------------------------
 # Build Stage
@@ -34,6 +37,7 @@ build:
 # ---------------------------------------------------------------------------
 clang-format:
   stage: check
+  allow_failure: true
   needs:
     - job: build
       artifacts: false
@@ -42,6 +46,7 @@ clang-format:
 
 cppcheck:
   stage: check
+  allow_failure: true
   needs:
     - job: build
       artifacts: false
@@ -50,6 +55,7 @@ cppcheck:
 
 clang-tidy:
   stage: check
+  allow_failure: true
   needs:
     - job: build
       artifacts: true

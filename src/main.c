@@ -16,7 +16,8 @@
  *
  * @return always 0.
  */
-int main(int argc __attribute__((unused)), const char *argv[] __attribute__((unused))) {
+int main(int argc __attribute__((unused)), const char *argv[] __attribute__((unused)))
+{
     printf("Generic C Project Template.\n");
 
     return 0;

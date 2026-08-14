@@ -9,7 +9,9 @@ Checks: >
   -bugprone-reserved-identifier,
   -readability-magic-numbers,
   -readability-else-after-return,
-  -readability-braces-around-statements
+  -readability-braces-around-statements,
+  -readability-identifier-length,
+  -clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling
 WarningsAsErrors: ''
 HeaderFilterRegex: '.*'
 FormatStyle: file

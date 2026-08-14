@@ -68,6 +68,7 @@ void tearDown(void) {}
  * void test_<functionUnderTestName>_<functionTestCaseNumber>(void);
  * */
 
-void test_FILE_TAG_0(void) {
+void test_FILE_TAG_0(void)
+{
     TEST_IGNORE_MESSAGE("Implement tests for the \"FILE_TAG\" module");
 }
