@@ -26,7 +26,7 @@ LFLAGS = $(CFLAGS)
 LIBS =
 
 # OPCIONES POR CONFIGURACIÓN #
-CFLAGS_EXTRA_debug   = -O0 -g3
+CFLAGS_EXTRA_debug   = -O0 -g3 -Wno-cpp
 CFLAGS_EXTRA_release = -O2
 
 # PATHS #
